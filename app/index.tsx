@@ -1,8 +1,16 @@
 
+import { useState } from "react";
 import { Button, Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
 
 export default function Index() {
-  
+  const [task, setTask] = useState('')
+  const [myTasks, setMyTasks] = useState([])
+
+  function handleAddTask(){
+    setMyTasks( oldState => [...oldState, task])
+    setTask('')
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}> Bem-vindo Fulano</Text>
@@ -11,15 +19,36 @@ export default function Index() {
         placeholder="Comprar pão"
         placeholderTextColor='#555'
         style={styles.input}
+        value={task}
+        onChangeText={setTask}
       />
 
       <TouchableOpacity
         activeOpacity={0.5}
         style={styles.button}
+        onPress={handleAddTask}
       >
         <Text style={styles.buttonText}>Adicionar</Text>
-
       </TouchableOpacity>
+
+      <Text style={[styles.title, { marginVertical: 30}]}> 
+        A fazeres
+      </Text>
+
+      {
+            myTasks.map( (item, index) => (
+              <TouchableOpacity 
+                key={index}
+                style={styles.buttonTask}
+              >
+                <Text
+                  style={styles.textTask}
+                >
+                  {item}
+                </Text>
+              </TouchableOpacity>
+            ))
+          }
 
     </View>
   );
@@ -56,5 +85,17 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 17
+  },
+  buttonTask: {
+    backgroundColor: '#1F1E25',
+    padding: 15,
+    alignItems: 'center',
+    borderRadius: 10,
+    marginBottom: 10
+  },
+  textTask: {
+    color: '#fff',
+    fontSize: 22,
+    fontWeight: 'bold'
   }
 })
