@@ -32,7 +32,7 @@ export default function Index() {
       </TouchableOpacity>
 
       <Text style={[styles.title, { marginVertical: 30}]}> 
-        A fazeres
+        A fazeres - agora
       </Text>
 
       {
