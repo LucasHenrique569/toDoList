@@ -1,58 +1,70 @@
 
 import { useState } from "react";
-import { Button, Text, View, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { Button, Text, View, StyleSheet, TextInput, TouchableOpacity, ScrollView } from "react-native";
 
 export default function Index() {
-  const [task, setTask] = useState('')
-  const [myTasks, setMyTasks] = useState([])
+  const [task, setTask] = useState<string>('')
+  const [myTasks, setMyTasks] = useState<string[]>([])
 
   function handleAddTask(){
-    setMyTasks( oldState => [...oldState, task])
-    setTask('')
+    if(task.trim() !== ''){
+      setMyTasks( oldState => [ ...oldState, task])
+      setTask('')
+    }
+  }
+
+  function handleRemoveTask(taskToRemove: string){
+    setMyTasks(oldState => oldState.filter( task => task !== taskToRemove))
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}> Bem-vindo Fulano</Text>
-
-      <TextInput 
-        placeholder="Comprar pão"
-        placeholderTextColor='#555'
-        style={styles.input}
-        value={task}
-        onChangeText={setTask}
-      />
-
-      <TouchableOpacity
-        activeOpacity={0.5}
-        style={styles.button}
-        onPress={handleAddTask}
+      <ScrollView
+        keyboardShouldPersistTaps='handled'
       >
-        <Text style={styles.buttonText}>Adicionar</Text>
-      </TouchableOpacity>
+        <Text style={styles.title}> Bem-vindo Fulano</Text>
 
-      <Text style={[styles.title, { marginVertical: 30}]}> 
-        A fazeres - agora
-      </Text>
+        <TextInput 
+          placeholder="Comprar pão"
+          placeholderTextColor='#555'
+          style={styles.input}
+          value={task}
+          onChangeText={setTask}
+        />
 
-      {
-            myTasks.map( (item, index) => (
-              <TouchableOpacity 
-                key={index}
-                style={styles.buttonTask}
-              >
-                <Text
-                  style={styles.textTask}
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={styles.button}
+          onPress={handleAddTask}
+        >
+          <Text style={styles.buttonText}>Adicionar</Text>
+        </TouchableOpacity>
+
+        <Text style={[styles.title, { marginVertical: 30}]}> 
+          A fazeres - agora
+        </Text>
+
+        {
+              myTasks.map( (item, index) => (
+                <TouchableOpacity 
+                  key={index}
+                  style={styles.buttonTask}
+                  onPress={() => handleRemoveTask(item)}
                 >
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            ))
-          }
-
+                  <Text
+                    style={styles.textTask}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))
+            }
+      </ScrollView>
     </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
